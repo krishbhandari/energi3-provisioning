@@ -1198,23 +1198,22 @@ _copy_keystore() {
   
   clear
   echo
-  echo "This script uses https://send.firefox.com/ to transfer files from your"
-  echo "desktop computer onto the vps. You can read more about the service here"
-  echo "https://en.wikipedia.org/wiki/Firefox_Send"
-  sleep .3
+  echo "Next we will copy the wallet file from your desktop to the VPS."
+  echo "To start click on link below:"
   echo
-  echo "Shutdown your desktop Energi3 node and upload the keystore file to"
   echo "https://send.firefox.com/"
-  echo "Paste in the URL to your keystore file below:"
+  echo
+  echo "Once upload completes, copy the URL from Firefox and paste below:"
   sleep .3
   echo
   REPLY=''
   while [[ -z "${REPLY}" ]] || [[ "$( echo "${REPLY}" | grep -c 'https://send.firefox.com/download/' )" -eq 0 ]]
   do
-    read -p "URL (leave blank to do it manually (sftp/scp)): " -r
+    read -p "Paste URL (leave blank and hit ENTER to do it manually): " -r
     if [[ -z "${REPLY}" ]]
     then      
-      echo "Please copy the keystore file to ${CONF_DIR}/keystore directory on your own"
+      echo "Please copy the wallet file to ${CONF_DIR}/keystore directory on your own using"
+      echo "an sftp software WSFTP or "
       read -p "Press Enter Once Done: " -r
       if [[ ${EUID} = 0 ]]
       then
@@ -1332,9 +1331,9 @@ _get_enode () {
   # Print enode of core node
   while [ -S ${CONF_DIR}/energi3.ipc ]
   do
-    sleep 0.3
+    sleep 1
   done
-  sleep 0.3
+  sleep 1
   
   echo
   echo "enode for the Masternode:"
