@@ -1302,7 +1302,7 @@ _start_energi3 () {
   # Start energi3
   
   SYSTEMCTLSTATUS=`systemctl status energi3.service | grep "Active:" | awk '{print $2}'`
-  if [[ "${SYSTEMCTLSTATUS}" -ne "Active" ]]
+  if [[ "${SYSTEMCTLSTATUS}" != "Active" ]]
   then
     ${SUDO} systemctl start energi3.service
   else
@@ -1317,7 +1317,7 @@ _stop_energi3 () {
   
   SYSTEMCTLSTATUS=`systemctl status energi3.service | grep "Active:" | awk '{print $2}'`
   
-  if [[ "${SYSTEMCTLSTATUS}" == "Active" ]]
+  if [[ "${SYSTEMCTLSTATUS}" = "Active" ]]
   then
     ${SUDO} systemctl stop energi3.service
   else
@@ -1329,7 +1329,7 @@ _stop_energi3 () {
 _get_enode () {
 
   # Print enode of core node
-  while [ -S ${CONF_DIR}/energi3.ipc ]
+  while [ ! -S ${CONF_DIR}/energi3.ipc ]
   do
     sleep 1
   done
@@ -2034,7 +2034,7 @@ case ${INSTALLTYPE} in
         _install_energi3
         
         REPLY=''
-        read -p "Do you want to download keystore account file to the computer (y/[n])?: " -r
+        read -p "Do you want to download wallet file to the computer (y/[n])?: " -r
         REPLY=${REPLY,,} # tolower
         if [[ "${REPLY}" == 'y' ]]
         then
