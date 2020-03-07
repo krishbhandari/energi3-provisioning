@@ -1304,6 +1304,7 @@ _start_energi3 () {
   SYSTEMCTLSTATUS=`systemctl status energi3.service | grep "Active:" | awk '{print $2}'`
   if [[ "${SYSTEMCTLSTATUS}" != "Active" ]]
   then
+    echo "Starting Energi Core Node...."
     ${SUDO} systemctl start energi3.service
   else
     echo "energi3 service is running..."
@@ -1319,6 +1320,7 @@ _stop_energi3 () {
   
   if [[ "${SYSTEMCTLSTATUS}" = "Active" ]]
   then
+    echo "Stopping Energi Core Node..."
     ${SUDO} systemctl stop energi3.service
   else
     echo "energi3 service is not running..."
@@ -1336,7 +1338,7 @@ _get_enode () {
   sleep 1
   
   echo
-  echo "enode for the Masternode:"
+  echo "Use the following enode information to announce Masternode in Energi Nexus:"
   if [[ ${EUID} = 0 ]]
   then
     su - ${USRNAME} -c "${BIN_DIR}/energi3 ${APPARG} attach -exec 'admin.nodeInfo.enode' " 2>/dev/null | jq -r
