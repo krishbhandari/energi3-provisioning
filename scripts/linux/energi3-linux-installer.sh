@@ -11,7 +11,7 @@
 #         from v2 to v3.
 # 
 # Version:
-#   1.2.7 20200306 ZA Initial Script
+#   1.2.8 20200306 ZA Initial Script
 #
 : '
 # Run the script to get started:
@@ -1305,7 +1305,7 @@ _start_energi3 () {
   SYSTEMCTLSTATUS=`systemctl status energi3.service | grep "Active:" | awk '{print $2}'`
   if [[ "${SYSTEMCTLSTATUS}" -ne "Active" ]]
   then
-    systemctl start energi3.service
+    ${SUDO} systemctl start energi3.service
   else
     echo "energi3 service is running..."
   fi
@@ -1320,11 +1320,32 @@ _stop_energi3 () {
   
   if [[ "${SYSTEMCTLSTATUS}" == "Active" ]]
   then
-    systemctl stop energi3.service
+    ${SUDO} systemctl stop energi3.service
   else
     echo "energi3 service is not running..."
   fi
   
+}
+
+_get_enode () {
+
+  # Print enode of core node
+  while [ -S ${CONF_DIR}/energi3.ipc ]
+  do
+    sleep 0.3
+  done
+  sleep 0.3
+  
+  echo
+  echo "enode for the Masternode:"
+  if [[ ${EUID} = 0 ]]
+  then
+    su - ${USRNAME} -c "${BIN_DIR}/energi3 ${APPARG} attach -exec 'admin.nodeInfo.enode' " 2>/dev/null | jq -r
+  else
+    energi3 ${APPARG} attach -exec "admin.nodeInfo.enode" 2>/dev/null | jq -r
+  fi
+  echo
+
 }
 
 _start_energi2 () {
@@ -1991,7 +2012,6 @@ case ${INSTALLTYPE} in
         _check_clock
         _add_swap
         _add_logrotate
-        _add_systemd
         
         # Check if user wants to install 2FA
         clear 2> /dev/null
@@ -2008,15 +2028,6 @@ case ${INSTALLTYPE} in
         then
           _setup_two_factor
         fi
-        
-        # Check if user wants to install RSA for key based login
-        REPLY=''
-        read -p "Do you want to install RSA Key [Y/n]?: " -r
-        REPLY=${REPLY,,} # tolower
-        if [[ "${REPLY}" == 'y' ]] || [[ -z "${REPLY}" ]]
-        then
-          _add_rsa_key
-        fi
 
         #
         # ==> Run as user <==
@@ -2030,6 +2041,10 @@ case ${INSTALLTYPE} in
         then
           _copy_keystore
         fi
+
+        _add_systemd
+        
+        _start_energi3
         
         ;;
         
@@ -2090,7 +2105,6 @@ case ${INSTALLTYPE} in
         _check_clock
         _add_swap
         _add_logrotate
-        _add_systemd
         
         if [[ ! -s "${USRHOME}/.google_authenticator" ]]
         then
@@ -2110,23 +2124,13 @@ case ${INSTALLTYPE} in
             _setup_two_factor
           fi
         fi
-        
-        if [[ ! -s "${USRHOME}/.ssh/authorized_keys" ]]
-        then
-          # Check if user wants to install RSA for key based login
-          REPLY=''
-          read -p "Do you want to install RSA Key [[y]/n]?: " -r
-          REPLY=${REPLY,,} # tolower
-          if [[ "${REPLY}" == 'y' ]] || [[ -z "${REPLY}" ]]
-          then
-            _add_rsa_key
-          fi
-        fi
 
         #
         # ==> Run as user <==
         #
+        _stop_energi3
         _upgrade_energi3
+        _start_energi3
  
         ;;
       
@@ -2206,15 +2210,6 @@ case ${INSTALLTYPE} in
         then
           _setup_two_factor
         fi
-        
-        # Check if user wants to install RSA for key based login
-        REPLY=''
-        read -p "Do you want to install RSA Key [Y/n]?: " -r
-        REPLY=${REPLY,,} # tolower
-        if [[ "${REPLY}" == 'y' ]] || [[ -z "${REPLY}" ]]
-        then
-          _add_rsa_key
-        fi
 
         #
         # ==> Run as user <==
@@ -2262,10 +2257,6 @@ case ${INSTALLTYPE} in
             echo
             sleep 3
           fi
-
-          _stop_energi2
-          
-          _start_energi3
           
         fi
         
@@ -2299,6 +2290,9 @@ esac
 # End installer
 ##
 _end_instructions
+
+# present enode information
+_get_enode
 
 
 # End of Installer
