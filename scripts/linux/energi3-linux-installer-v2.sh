@@ -1338,7 +1338,7 @@ _get_enode () {
   done
   sleep 1
   
-  if [[ ${EUID} = 0 ]] & [[ -S ${CONF_DIR}/energi3.ipc ]]
+  if [[ ${EUID} = 0 ]] && [[ -S ${CONF_DIR}/energi3.ipc ]]
   then
     echo "${GREEN}To Announce Masternode go to:${NC} https://gen3.energi.network/masternodes/announce"
     echo -n "Owner Address: "
