@@ -11,7 +11,7 @@
 #         from v2 to v3.
 # 
 # Version:
-#   1.2.5 20200303 ZA Initial Script
+#   1.2.9 20200309 ZA Initial Script
 #
 : '
 # Run the script to get started:
@@ -1436,7 +1436,7 @@ _get_enode () {
   done
   sleep 1
   
-  if [[ ${EUID} = 0 ]] & [[ -S ${CONF_DIR}/energi3.ipc ]]
+  if [[ ${EUID} = 0 ]] && [[ -S ${CONF_DIR}/energi3.ipc ]]
   then
     echo "${GREEN}To Announce Masternode go to:${NC} https://gen3.energi.network/masternodes/announce"
     echo -n "Owner Address: "
