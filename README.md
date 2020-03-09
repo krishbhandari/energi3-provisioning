@@ -3,7 +3,8 @@
 This repository has provisioning scripts as well as startup scrits for Energi Core Node
 
 - Linux / VPS <br>
--- energi3-linux-installer.sh : Provisioning Script<br>
+-- energi3-linux-installer.sh : Provisioning Script for amd64 or x86_64 Linux<br>
+-- energi3-aarch64-installer.sh : Provisioning Script for RPi and i386 (32-bit Linux)<br>
 -- start_staking.sh           : Start Staking<br>
 -- start_screen_staking.sh    : Start Staking within `screen`<br>
 -- start_mn.sh                : Start Masternode<br>
