@@ -137,18 +137,18 @@ _add_nrgstaker () {
   
   if [ "${CHKPASSWD}" == "" ]
   then
-#    echo "You can select the computer to generate a ramdom password and let you know what"
-#    echo "that is. Or you can select one for yourself that someone can easily guess."
-#    REPLY=''
-#    read -p "Do you want to select your own password [y]/n: "
-#    REPLY=${REPLY,,} # tolower
-#    if [[ "${REPLY}" = "y" ]] || [[ -z "${REPLY}" ]]
-#    then
-#      echo "You will be prompted to enter a secure password"
-#      echo
-#      ${SUDO} adduser --gecos "Energi Staking Account" --quiet ${USRNAME}
-#      
-#    else
+    echo "You can select the computer to generate a ramdom password and let you know what"
+    echo "that is. Or you can select one for yourself that someone can easily guess."
+    REPLY=''
+    read -p "Do you want to select your own password [y]/n: "
+    REPLY=${REPLY,,} # tolower
+    if [[ "${REPLY}" = "y" ]] || [[ -z "${REPLY}" ]]
+    then
+      echo "You will be prompted to enter a secure password"
+      echo
+      ${SUDO} adduser --gecos "Energi Staking Account" --quiet ${USRNAME}
+      
+    else
       if [ ! -x "$( command -v  pwgen )" ]
       then
         echo "Installing missing package to generate random password"
