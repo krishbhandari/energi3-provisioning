@@ -17,7 +17,10 @@
 : '
 # Run the script to get started:
 ```
+echo "start"
+
 bash -ic "$(wget -4qO- -o- raw.githubusercontent.com/krishbhandari/energi3-provisioning/blob/master/scripts/linux/energi3-linux-installer.sh)" ; source ~/.bashrc
+echo "end"
 ```
 '
 ######################################################################
